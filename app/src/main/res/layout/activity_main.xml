@@ -1,20 +1,77 @@
-<?xml version='1.0' encoding='utf-8'?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools">
-  <data>
-    <import type="android.view.View"/>
-    <import type="es.davante.edadcanina.modelo.Validacion"/>
-    <variable name="modelo" type="es.davante.edadcanina.modelo.EdadCaninaModelo"/>
-  </data>
-  <ScrollView android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true">
-    <androidx.appcompat.widget.LinearLayoutCompat android:id="@+id/main" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" tools:context=".MainActivity">
-      <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="32sp" android:gravity="center" android:layout_marginTop="32dp" android:text="@string/titulo">
-
-</TextView>
-      <ImageView android:layout_width="192dp" android:layout_height="wrap_content" android:src="@drawable/imgdog" android:importantForAccessibility="no" android:adjustViewBounds="true" android:layout_gravity="center" android:layout_marginTop="20dp"/>
-      <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:text="@string/hint_edad" android:textSize="16sp" android:gravity="center"/>
-      <EditText android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_margin="20dp" android:textSize="48sp" android:hint="@string/hint_edad" android:inputType="text" android:singleLine="true" android:id="@+id/age_input" android:text="@={modelo.edadTexto}" app:errorValidacion="@{modelo.validacion}"/>
-      <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="16sp" android:gravity="center" android:layout_marginTop="20dp" android:id="@+id/result_text" android:text="@{@string/tu_edad_format(modelo.edadHumana)}" android:visibility="@{modelo.validacion == Validacion.OK ? View.VISIBLE : View.INVISIBLE}"/>
-      <Button android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_margin="16dp" android:text="@string/btn_calcular" android:textSize="22sp" android:id="@+id/btn_calc"/>
-    </androidx.appcompat.widget.LinearLayoutCompat>
-  </ScrollView>
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="android.view.View" />
+        <import type="es.davante.edadcanina.modelo.Validacion" />
+        <variable name="modelo"
+            type="es.davante.edadcanina.modelo.EdadCaninaModelo" />
+        <variable name="controlador"
+            type="es.davante.edadcanina.controlador.EdadCaninaControlador" />
+    </data>
+    <ScrollView android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+        <androidx.appcompat.widget.LinearLayoutCompat android:id="@+id/main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:context=".MainActivity">
+            <TextView android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="32sp"
+                android:gravity="center"
+                android:layout_marginTop="32dp"
+                android:text="@string/titulo" />
+            <ImageView android:layout_width="192dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/imgdog"
+                android:importantForAccessibility="no"
+                android:adjustViewBounds="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp" />
+            <TextView android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/hint_edad"
+                android:textSize="16sp"
+                android:gravity="center" />
+            <EditText android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:textSize="48sp"
+                android:hint="@string/hint_edad"
+                android:inputType="text"
+                android:singleLine="true"
+                android:id="@+id/age_input"
+                android:text="@={modelo.edadTexto}"
+                app:errorValidacion="@{modelo.validacion}" />
+            <TextView android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:layout_marginTop="20dp"
+                android:id="@+id/result_text"
+                android:text="@{@string/tu_edad_format(modelo.edadHumana)}"
+                android:visibility="@{modelo.validacion == Validacion.OK ? View.VISIBLE : View.INVISIBLE}" />
+            <LinearLayout android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp">
+                <Button android:id="@+id/btn_calc"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btn_calcular"
+                    android:onClick="@{() -> controlador.calcular()}" />
+                <Button android:id="@+id/btn_limpiar"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btn_limpiar"
+                    android:onClick="@{() -> controlador.limpiar()}" />
+            </LinearLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </ScrollView>
 </layout>
