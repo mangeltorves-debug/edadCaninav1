@@ -1,5 +1,10 @@
 package es.davante.edadcanina.modelo;
 
+import androidx.databinding.Observable;
+import es.davante.edadcanina.BR;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
@@ -67,5 +72,25 @@ public class EdadCaninaModeloTest {
         modelo.setEdadTexto("+5");
         assertEquals(Validacion.OK, modelo.calcular());
         assertEquals(35, modelo.getEdadHumana());
+    }
+
+    @Test
+    public void soloAvisaCuandoCambianLosDatos() {
+        modelo.setEdadTexto("6");
+        List<Integer> avisos = new ArrayList<>();
+        modelo.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable origen, int propiedad) {
+                avisos.add(propiedad);
+            }
+        });
+        modelo.calcular();
+        modelo.setEdadTexto("6");
+        modelo.calcular();
+        assertEquals(Arrays.asList(BR.edadHumana, BR.validacion), avisos);
+
+        modelo.setEdadTexto("7");
+        assertEquals(Validacion.SIN_CALCULAR, modelo.getValidacion());
+        assertEquals(0, modelo.getEdadHumana());
     }
 }

@@ -16,15 +16,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        binding.btnCalc.setOnClickListener(v -> calcularEdadCanina());
-    }
-
-    private void calcularEdadCanina() {
-        modelo.setEdadTexto(binding.ageInput.getText().toString());
-        Validacion estado = modelo.calcular();
-        binding.resultText.setText(estado == Validacion.OK
-                ? getString(R.string.tu_edad_format, modelo.getEdadHumana()) : "");
-        mostrarError(estado);
+        binding.setModelo(modelo);
+        binding.btnCalc.setOnClickListener(v -> mostrarError(modelo.calcular()));
     }
 
     private void mostrarError(Validacion estado) {
