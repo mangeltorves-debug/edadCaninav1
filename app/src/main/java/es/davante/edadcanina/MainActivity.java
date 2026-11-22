@@ -1,4 +1,4 @@
-package com.example.edadcaninav1; // (Mantén tu paquete actual)
+package es.davante.edadcanina;
 
 import android.os.Bundle;
 import android.view.View;
@@ -24,13 +24,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Enlazamos las vistas con el layout
-        etEdadPerro = findViewById(R.id.etEdadPerro);
-        btnCalcular = findViewById(R.id.btnCalcular);
-        tvResultado = findViewById(R.id.tvResultado);
-
-        btnCalcular.addListener(new View.OnClickListener() { // O btnCalcular.setOnClickListener según tu versión
-            // Nota: En Java estándar es setOnClickListener
-        });
+        etEdadPerro = findViewById(R.id.age_input);
+        btnCalcular = findViewById(R.id.btn_calc);
+        tvResultado = findViewById(R.id.result_text);
 
         btnCalcular.setOnClickListener(new View.OnClickListener() {
             @Override
