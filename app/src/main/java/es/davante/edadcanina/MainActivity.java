@@ -1,10 +1,8 @@
 package es.davante.edadcanina;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+import androidx.databinding.DataBindingUtil;
+import es.davante.edadcanina.databinding.ActivityMainBinding;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -14,35 +12,22 @@ public class MainActivity extends AppCompatActivity {
     private static final int EDAD_MINIMA = 1;
     private static final int EDAD_MAXIMA = 30;
 
-    private EditText etEdadPerro;
-    private Button btnCalcular;
-    private TextView tvResultado;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        // Enlazamos las vistas con el layout
-        etEdadPerro = findViewById(R.id.age_input);
-        btnCalcular = findViewById(R.id.btn_calc);
-        tvResultado = findViewById(R.id.result_text);
-
-        btnCalcular.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                calcularEdadCanina();
-            }
-        });
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        binding.btnCalc.setOnClickListener(v -> calcularEdadCanina());
     }
 
     private void calcularEdadCanina() {
-        String textoInput = etEdadPerro.getText().toString().trim();
+        String textoInput = binding.ageInput.getText().toString().trim();
 
         // 1. Validar campo vacío
         if (textoInput.isEmpty()) {
-            etEdadPerro.setError(getString(R.string.error_vacio));
-            etEdadPerro.requestFocus();
+            binding.ageInput.setError(getString(R.string.error_vacio));
+            binding.ageInput.requestFocus();
             return;
         }
 
@@ -52,15 +37,15 @@ public class MainActivity extends AppCompatActivity {
         try {
             edadPerro = Integer.parseInt(textoInput);
         } catch (NumberFormatException e) {
-            etEdadPerro.setError(getString(R.string.error_no_numerico));
-            etEdadPerro.requestFocus();
+            binding.ageInput.setError(getString(R.string.error_no_numerico));
+            binding.ageInput.requestFocus();
             return;
         }
 
         // 3. Validar rango de valores (ej: entre 1 y 30 años)
         if (edadPerro < EDAD_MINIMA || edadPerro > EDAD_MAXIMA) {
-            etEdadPerro.setError(getString(R.string.error_rango));
-            etEdadPerro.requestFocus();
+            binding.ageInput.setError(getString(R.string.error_rango));
+            binding.ageInput.requestFocus();
             return;
         }
 
@@ -69,6 +54,6 @@ public class MainActivity extends AppCompatActivity {
 
         // 5. Mostrar resultado usando strings.xml con varios parámetros (%1$d y %2$d)
         String mensajeResultado = getString(R.string.resultado_formato, edadPerro, edadHumana);
-        tvResultado.setText(mensajeResultado);
+        binding.resultText.setText(mensajeResultado);
     }
 }
