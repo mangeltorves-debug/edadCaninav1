@@ -191,3 +191,39 @@ Comprueba en GitHub que tu fork tiene ahora dos ramas: `main` y `v2-validacion`.
 - [ ] No quedan números mágicos en `MainActivity`.
 - [ ] `onCreate()` solo prepara la pantalla; la lógica está en `calcularEdad()`.
 - [ ] El trabajo está en la rama `v2-validacion`, no en `main`.
+
+## EdadCaninaMVC
+
+La rama `v3-mvc` parte de `v2-validacion`. Su identificador de aplicación es `es.davante.edadcanina.mvc`, así que se pueden instalar las dos versiones en el mismo dispositivo.
+
+### Reto elegido · Casos raros
+
+Acepto `05` y `+5` porque ambos representan cinco años. El modelo quita los espacios de los extremos y usa `Integer.parseInt` en base diez antes de comprobar el rango de 1 a 30. En los dos casos debe devolver `OK` y 35 años humanos. Las pruebas `ceroInicial` y `signoPositivo` fijan esta decisión.
+
+### Explícalo con tus palabras
+
+1. **¿Qué diferencia hay entre `@{…}` y `@={…}`?** El resultado usa `@{…}` porque solo necesita leer el modelo y actualizar el texto en pantalla. El campo de entrada usa `@={…}` porque también tiene que escribir en el modelo cuando tecleo. Ese mismo enlace vacía el campo cuando pulso Limpiar.
+2. **¿Qué pasa desde que pulso Calcular hasta que aparece 42?** Al escribir 6, el enlace ya ha guardado «6» en el modelo. El clic del XML llama al controlador, que pide al modelo que calcule. El modelo convierte el texto a entero, comprueba el rango y multiplica 6 por 7. Al cambiar la edad humana y la validación, avisa a DataBinding. El enlace del resultado da formato a 42 y lo hace visible porque el estado es `OK`.
+3. **¿Qué cambiaría si el factor pasara de 7 a 6?** En el código de la aplicación solo cambiaría la constante `FACTOR` de `EdadCaninaModelo.java`. El controlador pide un cálculo y la vista muestra la respuesta. Ninguno necesita saber la fórmula. También actualizaría los resultados esperados en las pruebas, por ejemplo de 42 a 36 para una entrada de 6.
+
+### Autoevaluación
+
+- [x] El campo vacío o con espacios, las letras y los valores fuera de 1–30 reciben su error. Con 6 aparece 42. Limpiar vacía la entrada, oculta el resultado y quita el error, incluso después de calcular con el campo vacío.
+- [x] La Activity crea el modelo y el controlador, los conecta al binding y guarda o restaura el estado.
+- [x] El modelo expone tres propiedades observables, contiene las reglas y devuelve un enum. Los mensajes viven en recursos. Al editar la entrada caduca el cálculo anterior.
+- [x] El controlador acepta las acciones Calcular y Limpiar y delega en el modelo sin guardar vistas.
+- [x] El XML enlaza la entrada en ambos sentidos, muestra el resultado en un sentido y presenta el error con el adaptador del paquete `vista`.
+- [x] El estado se reconstruye a partir del texto y de si se había pulsado Calcular. Esto también distingue el campo vacío inicial del campo vacío que ya muestra un error.
+- [x] Hay diez pruebas JUnit del modelo y una del controlador. Se ejecutan con `./gradlew testDebugUnitTest`.
+- [x] Los comentarios explican decisiones como aceptar el signo positivo, invalidar el resultado y guardar solo el estado indispensable.
+- [x] Cada paso tiene un commit y una etiqueta, de `paso-1` a `paso-7`.
+
+### Preguntas de los pasos
+
+- **1. Clases generadas.** Activar DataBinding prepara el compilador. El fichero `ActivityMainBinding` aparece cuando `activity_main.xml` tiene la raíz `<layout>`.
+- **2. Identificadores.** Con el binding, un campo que no existe falla al compilar. Un `R.id` inexistente también fallaba antes. La diferencia es que un identificador existente en *otro* layout sí podía compilar con `findViewById` y devolver `null` al ejecutar la app.
+- **3. Idiomas.** Para traducir la aplicación añadiría recursos de texto. El modelo devuelve estados como `VACIO`, que la vista traduce al idioma activo.
+- **4. Ida y vuelta.** Al teclear, la vista llama a `setEdadTexto`. Si el texto es nuevo, el modelo lo guarda y avisa. Si el enlace devuelve el mismo texto, la comprobación de igualdad corta la cadena antes de volver a avisar o borrar el resultado.
+- **5. Adaptador.** Traducir un estado a un mensaje y dar el foco al campo son decisiones de pantalla. Por eso el adaptador vive en `vista`.
+- **6. Controlador.** Cada botón solo expresa una intención. Un método corto basta porque el modelo ya sabe validar, calcular y limpiar.
+- **7. Recreación.** El modelo pertenece a la instancia de la Activity. Un `ViewModel` podría conservarlo durante un giro. En este ejercicio, el `Bundle` permite reconstruirlo y distinguir una entrada recién editada de otra ya calculada.
